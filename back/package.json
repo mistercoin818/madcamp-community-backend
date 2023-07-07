@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "npm run start:dev",
+    "start:dev": "nodemon src/index.js -r dotenv/config --dotenv-config-path .env.development",
+    "start:prod": "node src/index.js -r dotenv/config --dotenv-config-path .env.production"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "mysql": "^2.18.1",
+    "mysql2": "^3.5.0",
     "nodemon": "^2.0.22"
   }
 }

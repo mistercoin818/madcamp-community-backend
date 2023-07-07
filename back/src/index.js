@@ -1,9 +1,9 @@
-const express = require("express");
+const express = require('express');
 const app = express();
 const PORT = process.env.port || 8000;
 
-app.get("/", (req, res) => {
-  console.log("requested.");
+app.get('/', (req, res) => {
+  console.log('requested.');
 });
 
 app.listen(PORT, () => {
