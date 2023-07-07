@@ -3,6 +3,13 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+// import dotenv from 'dotenv';
+// 
+// if (process.env.NODE_ENV === 'development') {
+//   dotenv.config({ path: '.env.development' });
+// } else if (process.env.NODE_ENV === 'production') {
+//   dotenv.config({ path: '.env.production' });
+// }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
