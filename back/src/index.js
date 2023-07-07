@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
-const dotenv = require('dotenv');
 
 // 환경 변수 설정
+const dotenv = require('dotenv');
 if (process.env.NODE_ENV === 'development') {
   dotenv.config({ path: '.env.development' });
 } else {
@@ -12,6 +12,15 @@ if (process.env.NODE_ENV === 'development') {
 const PORT = process.env.PORT || 8000;
 const client = process.env.CLIENT;
 const cors = require('cors');
+
+// DB 연결
+const db = require('../models');
+db.sequelize
+  .sync()
+  .then(() => {
+    console.log('DB Connection Success!');
+  })
+  .catch(console.error);
 
 // cors 설정 및 express 관련 설정들
 const whitelist = [`${client}`];
@@ -36,6 +45,7 @@ app.use(cors(corsOptions));
 // 요청
 app.get('/', (req, res) => {
   console.log('requested.');
+  res.send('Hello World!');
 });
 
 app.post('/example', (req, res) => {
