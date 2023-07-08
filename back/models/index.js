@@ -31,6 +31,13 @@ fs
     db[model.name] = model;
   });
 
+// 여기 하는 건가?
+// 예시) const User = sequelize.define('User', {
+//  // 모델 정의
+// }, {
+//  // 옵션  
+// });
+
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);

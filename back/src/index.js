@@ -13,14 +13,26 @@ const PORT = process.env.PORT || 8000;
 const client = process.env.CLIENT;
 const cors = require('cors');
 
+
 // DB 연결
 const db = require('../models');
 db.sequelize
-  .sync()
-  .then(() => {
-    console.log('DB Connection Success!');
-  })
-  .catch(console.error);
+.sync()
+.then(() => {
+  console.log('DB Connection Success!');
+})
+.catch(console.error);
+
+// 공식 문서가 제안한 연결 테스트 코드
+const asyncConnTest = async () => {
+  try {
+    await db.sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+};
+asyncConnTest();
 
 // cors 설정 및 express 관련 설정들
 const whitelist = [`${client}`];
