@@ -11,6 +11,12 @@
 
 - node.js v18.15.0
 - npm v9.5.0
+- 몰입캠프 vm에서 설치하기
+  - apt install npm
+  - apt install curl
+  - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+  - source ~/.bashrc
+  - nvm install 18.15.0
 
 ### 1. 이 repository를 clone합니다. 이후 과정은 모두 back 폴더에서 진행됩니다.
 
@@ -29,7 +35,7 @@
 
 ### 7. `npm run seed_user_auth`로, 4번에서 담아준 기본 인증용 정보를 db에 저장합니다.
 
-### 8. `npm start`로 구동이 가능합니다.
+### 8. 6번의 커맨드로 서버 구동이 가능합니다.
 
 ### 9. 배포용 서버는 아래의 작업을 추가로 해 주세요.
 
