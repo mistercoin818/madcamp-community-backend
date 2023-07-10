@@ -1,3 +1,97 @@
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const process = require('process');
+const basename = path.basename(__filename);
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/../config/config.js')[env];
+const db = {};
+
+const sequelize = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  {
+    ...config,
+    dialectOptions: {
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_unicode_ci',
+    },
+  }
+);
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
+
+fs.readdirSync(__dirname)
+  .filter((file) => {
+    return (
+      file.indexOf('.') !== 0 &&
+      file !== basename &&
+      file.slice(-3) === '.js' &&
+      file.indexOf('.test.js') === -1
+    );
+  })
+  .forEach((file) => {
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize);
+    db[model.name] = model;
+  });
+
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
+module.exports = db;
+
+// -------------------------------------------------------------
+// const fs = require('fs');
+// const path = require('path');
+// const Sequelize = require('sequelize');
+// const process = require('process');
+// const basename = path.basename(__filename);
+// const env = process.env.NODE_ENV || 'development';
+// const config = require(__dirname + '/../config/config.js')[env];
+// const db = {};
+//
+// const sequelize = new Sequelize(
+//   config.database,
+//   config.username,
+//   config.password,
+//   {
+//     ...config,
+//     dialectOptions: {
+//       charset: 'utf8mb4',
+//       collate: 'utf8mb4_unicode_ci',
+//     },
+//   }
+// );
+// db.Sequelize = Sequelize;
+// db.sequelize = sequelize;
+//
+// fs.readdirSync(__dirname)
+//   .filter((file) => {
+//     return (
+//       file.indexOf('.') !== 0 &&
+//       file !== basename &&
+//       file.slice(-3) === '.js' &&
+//       file.indexOf('.test.js') === -1
+//     );
+//   })
+//   .forEach((file) => {
+//     const model = require(path.join(__dirname, file))(sequelize);
+//     db[model.name] = model;
+//   });
+//
+// Object.keys(db).forEach((modelName) => {
+//   if (db[modelName].associate) {
+//     db[modelName].associate(db);
+//   }
+// });
+//
+// module.exports = db;
+// -------------------------------------------------------------
+/*
 'use strict';
 
 const fs = require('fs');
@@ -264,12 +358,12 @@ const UserAuth = sequelize.define(
   }
 );
 
-Post.belongsTo(User, { foreignKey: 'authorId', targetKey: 'id' });
-Schedule.belongsTo(User, { foreignKey: 'authorId', targetKey: 'id' });
-Comment.belongsTo(User, { foreignKey: 'authorId', targetKey: 'id' });
-Comment.belongsTo(Post, { foreignKey: 'postId', targetKey: 'id' });
-UserSchedule.belongsTo(User, { foreignKey: 'authorId', targetKey: 'id' });
-UserSchedule.belongsTo(Schedule, { foreignKey: 'scheduleId', targetKey: 'id' });
+Post.belongsTo(User, { foreignKey: 'authorId' });
+Schedule.belongsTo(User, { foreignKey: 'authorId' });
+Comment.belongsTo(User, { foreignKey: 'authorId' });
+Comment.belongsTo(Post, { foreignKey: 'postId' });
+UserSchedule.belongsTo(User, { foreignKey: 'authorId' });
+UserSchedule.belongsTo(Schedule, { foreignKey: 'scheduleId' });
 
 db.User = User;
 db.Post = Post;
@@ -278,19 +372,19 @@ db.Comment = Comment;
 db.UserSchedule = UserSchedule;
 db.UserAuth = UserAuth;
 
-User.init(sequelize);
-Post.init(sequelize);
-Schedule.init(sequelize);
-Comment.init(sequelize);
-UserSchedule.init(sequelize);
-UserAuth.init(sequelize);
-
 // table 정의 끝 ----------------------------------------
+User.init(db.sequelize);
+Post.init(db.sequelize);
+Schedule.init(db.sequelize);
+Comment.init(db.sequelize);
+UserSchedule.init(db.sequelize);
+UserAuth.init(db.sequelize);
 
-// Object.keys(db).forEach((modelName) => {
-//   if (db[modelName].associate) {
-//     db[modelName].associate(db);
-//   }
-// });
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
 
 module.exports = db;
+*/

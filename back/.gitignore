@@ -2,3 +2,4 @@
 !.env.example
 
 /node_modules
+/seeders/user_auth_info.csv
