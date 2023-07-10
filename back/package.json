@@ -8,9 +8,8 @@
     "start": "npm run start:dev",
     "start:dev": "cross-env NODE_ENV=development nodemon src/index.js",
     "start:prod": "cross-env NODE_ENV=production node src/index.js",
-    "migrate:dev": "npx cross-env NODE_ENV=development sequelize db:migrate",
-    "migrate:prod": "npx cross-env NODE_ENV=production sequelize db:migrate",
-    "seed_user_auth": "npx sequelize-cli db:seed:all"
+    "seed_user_auth": "npx sequelize-cli db:seed:all",
+    "docker-compose": "cd .docker && docker-compose up -d"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +19,7 @@
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "csv-parse": "^4.13.1",
+    "docker-compose": "^0.24.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mysql": "^2.18.1",

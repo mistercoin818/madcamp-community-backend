@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  week2_db:
+    image: mysql:5.7
+    ports:
+      - $DB_LOCAL_PORT:3306
+    container_name: week2_db
+    environment:
+      - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$DB_NAME
+      - MYSQL_USER=$DB_USER
+      - MYSQL_PASSWORD=$DB_PASSWORD
+      - MYSQL_CHARSET=utf8mb4
+      - MYSQL_COLLATION=utf8mb4_unicode_ci
+    volumes:
+      - week2_data:/var/lib/mysql
+
+volumes:
+  week2_data:
