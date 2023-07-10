@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Profile2Page extends StatefulWidget {
   const Profile2Page({super.key});
@@ -13,6 +15,22 @@ class Profile2Page extends StatefulWidget {
 class _Profile2PageState extends State<Profile2Page> {
   File? _imageFile;
   final ImagePicker _picker = ImagePicker();
+
+  Future<void> uploadImageToBackend(File imageFile) async {
+    final url = Uri.parse('http://localhost:8000/upload');
+    final request = http.MultipartRequest('POST', url);
+    request.files.add(await http.MultipartFile.fromPath('image', imageFile.path));
+
+    final response = await request.send();
+
+    if (response.statusCode == 200) {
+      // 이미지 업로드 성공
+      // TODO: 추가적인 처리 로직 작성
+    } else {
+      // 이미지 업로드 실패
+      // TODO: 에러 처리 로직 작성
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +47,91 @@ class _Profile2PageState extends State<Profile2Page> {
           children: <Widget>[
             imageProfile(),
             SizedBox(height:20),
-            nameTextField(),
+            Row(
+              children: <Widget>[
+                Icon(Icons.check_circle_outline),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Text(
+                  '이름: ',
+                  style: TextStyle(fontSize: 16.0, letterSpacing: 1.0),
+                ),
+                Text(
+                  '김태훈',
+                  style: TextStyle(fontSize: 16.0, letterSpacing: 1.0),
+                )
+              ],
+            ),
             SizedBox(height:20),
+            Row(
+              children: <Widget>[
+                Icon(Icons.check_circle_outline),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Text(
+                  '분반: ',
+                  style: TextStyle(fontSize: 16.0, letterSpacing: 1.0),
+                ),
+                Text(
+                  '1분반',
+                  style: TextStyle(fontSize: 16.0, letterSpacing: 1.0),
+                )
+              ],
+            ),
+            SizedBox(height:20),
+            Row(
+              children: <Widget>[
+                Icon(Icons.check_circle_outline),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Text(
+                  '학교: ',
+                  style: TextStyle(fontSize: 16.0, letterSpacing: 1.0),
+                ),
+                Text(
+                  '성균관대학교',
+                  style: TextStyle(fontSize: 16.0, letterSpacing: 1.0),
+                )
+              ],
+            ),
+            SizedBox(height:20),
+            Row(
+              children: <Widget>[
+                Icon(Icons.check_circle_outline),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Text(
+                  'KAIST 학번: ',
+                  style: TextStyle(fontSize: 16.0, letterSpacing: 1.0),
+                ),
+                Text(
+                  '20236231',
+                  style: TextStyle(fontSize: 16.0, letterSpacing: 1.0),
+                )
+              ],
+            ),
+            SizedBox(height:20),
+            nicknameTextField(),
+            SizedBox(height:20),
+            instagramField(),
+            SizedBox(height:20),
+            githubField(),
+            SizedBox(height:20),
+            linkedInField(),
+            SizedBox(height:20),
+            ElevatedButton(
+                onPressed: (){
+                  print('수정하기!');
+                }
+                // => uploadImageToBackend(_imageFile!)
+                ,
+                child: Text('수정하기')
+            ),
+
           ],
         ),
       ),
@@ -56,7 +157,7 @@ class _Profile2PageState extends State<Profile2Page> {
               },
               child: Icon(
                 Icons.camera_alt,
-                color: Colors.yellowAccent,
+                color: Colors.grey,
                 size: 40,
               ),
             )
@@ -66,7 +167,7 @@ class _Profile2PageState extends State<Profile2Page> {
     );
   }
 
-  Widget nameTextField(){
+  Widget nicknameTextField(){
     return TextFormField(
       decoration: InputDecoration(
         border: OutlineInputBorder(
@@ -76,16 +177,88 @@ class _Profile2PageState extends State<Profile2Page> {
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.yellowAccent,
+            color: Colors.black,
             width: 2,
           ),
         ),
         prefixIcon: Icon(
           Icons.person,
-          color: Colors.pink,
+          color: Colors.blueAccent,
         ),
-        labelText: 'Name',
-        hintText: 'Input your name'
+        labelText: 'NickName',
+        hintText: 'Input your nickname'
+      ),
+    );
+  }
+
+  Widget instagramField(){
+    return TextFormField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: Colors.pink
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.black,
+              width: 2,
+            ),
+          ),
+          prefixIcon: Icon(
+            FontAwesomeIcons.instagram,
+            color: Colors.pink
+          ),
+          labelText: 'Instagram ID',
+          hintText: 'Input your Instagram ID'
+      ),
+    );
+  }
+
+  Widget githubField(){
+    return TextFormField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: Colors.pink
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.black,
+              width: 2,
+            ),
+          ),
+          prefixIcon: Icon(
+              FontAwesomeIcons.github,
+              color: Colors.black
+          ),
+          labelText: 'GitHub ID',
+          hintText: 'Input your GitHub ID'
+      ),
+    );
+  }
+
+  Widget linkedInField(){
+    return TextFormField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: Colors.pink
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.black,
+              width: 2,
+            ),
+          ),
+          prefixIcon: Icon(
+              FontAwesomeIcons.linkedin,
+              color: Colors.blue
+          ),
+          labelText: 'LinkedIn ID',
+          hintText: 'Input your LinkedIn ID'
       ),
     );
   }
@@ -124,10 +297,13 @@ class _Profile2PageState extends State<Profile2Page> {
     );
   }
 
-  takePhoto(ImageSource source) async{
+  Future<void> takePhoto(ImageSource source) async{
     final pickedFile = await _picker.pickImage(source:source);
-    setState(() {
-      _imageFile = File(pickedFile!.path);
-    });
+    if(pickedFile != null){
+      setState(() {
+        _imageFile = File(pickedFile!.path);
+      });
+      await uploadImageToBackend(_imageFile!);
+    }
   }
 }
