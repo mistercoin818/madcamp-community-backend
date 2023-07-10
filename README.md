@@ -12,9 +12,9 @@
 - node.js v18.15.0
 - npm v9.5.0
 
-### 1. 이 repository를 clone합니다.
+### 1. 이 repository를 clone합니다. 이후 과정은 모두 back 폴더에서 진행됩니다.
 
-### 2. `npm install`로 필요한 dependency를 설치해 줍니다.
+### 2. `npm install`로 필요한 dependency를 설치해 줍니다. 
 
 ### 3. 필요한 .env 정보를 다 채워줍니다.
 
@@ -34,4 +34,4 @@
 ### 9. 배포용 서버는 아래의 작업을 추가로 해 주세요.
 
 - 서버에 pm2를 설치합니다 : `npm install pm2@latest -g`
-- 작성 중..
+- `pm2 start 'npm run start:prod'`를 입력하면 배포 환경 기준으로 무중단 배포가 가능합니다.
