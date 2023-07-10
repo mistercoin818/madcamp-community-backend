@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run start:dev",
     "start:dev": "cross-env NODE_ENV=development nodemon src/index.js",
-    "start:prod": "cross-env NODE_ENV=production node src/index.js"
+    "start:prod": "cross-env NODE_ENV=production node src/index.js",
+    "migrate:dev": "npx cross-env NODE_ENV=development sequelize db:migrate",
+    "migrate:prod": "npx cross-env NODE_ENV=production sequelize db:migrate"
   },
   "keywords": [],
   "author": "",

@@ -1,36 +1,39 @@
 const dotenv = require('dotenv');
-if (process.env.NODE_ENV === 'development') {
-  dotenv.config({ path: '.env.development' });
+const path = require('path');
+
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config({ path: path.resolve(__dirname, '../.env.development') });
 } else {
-  dotenv.config({ path: '.env.production' });
+  dotenv.config({ path: path.resolve(__dirname, '../.env.production') });
 }
+const env = process.env;
 
 module.exports = {
   development: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PW,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
+    username: env.MYSQL_USERNAME,
+    password: env.MYSQL_PASSWORD,
+    database: env.MYSQL_DATABASE,
+    host: env.MYSQL_HOST,
     dialect: 'mysql',
-    port: process.env.DB_PORT,
+    port: env.MYSQL_PORT,
     logging: console.log,
   },
   test: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PW,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
+    username: env.MYSQL_USERNAME,
+    password: env.MYSQL_PASSWORD,
+    database: env.MYSQL_DATABASE,
+    host: env.MYSQL_HOST,
     dialect: 'mysql',
-    port: process.env.DB_PORT,
+    port: env.MYSQL_PORT,
     logging: console.log,
   },
   production: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PW,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
+    username: env.MYSQL_USERNAME,
+    password: env.MYSQL_PASSWORD,
+    database: env.MYSQL_DATABASE,
+    host: env.MYSQL_HOST,
     dialect: 'mysql',
-    port: process.env.DB_PORT,
+    port: env.MYSQL_PORT,
     logging: console.log,
   },
 };
