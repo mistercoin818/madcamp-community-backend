@@ -55,6 +55,47 @@ app.use(express.urlencoded({ extended: false })); // 중첩된 객체 받지 않
 app.use(cors(corsOptions));
 
 // 요청
+// ------------------------
+const { UserAuth } = require('../models');
+
+app.post('/authenticate', async (req, res) => {
+  const { name, studentId } = req.body;
+  console.log(`req 도착 : name: ${name}, studentId : ${studentId}`);
+
+  try {
+    //const conn = await getConn();
+    // const [rows] = await conn.execute(
+    //   'SELECT * FROM user WHERE name = ? AND student_id = ?',
+    //   [name, studentId]
+    // );
+    const cnt = await UserAuth.count({
+      where: {
+        KAISTId: studentId,
+      }
+    })
+    //conn.release();
+    //console.log(rows);
+
+    if (cnt > 0) {
+      // 회원 인증 성공
+      // console.log(rows[0].creation)
+        // 계정이 이미 생성된 회원
+      res.status(200).send('등록된 회원, 로그인 페이지로 넘어갑니다.');
+    
+    } else {
+      // 회원 인증 실패
+      res.status(400).send('회원 인증 실패');
+    }
+  } catch (error) {
+    // 오류 발생
+    console.error(error);
+    res.status(500).send('서버 오류');
+  }
+});
+// ------------------------
+
+
+
 app.get('/', (req, res) => {
   console.log('requested.');
   res.send('Hello World!');
