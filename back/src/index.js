@@ -42,7 +42,8 @@ const whitelist = [`${client}`];
 const corsOptions = {
   origin: (origin, callback) => {
     console.log('[REQUEST-CORS] Request from origin: ', origin);
-    if (!origin || whitelist.indexOf(origin) !== -1) callback(null, true);
+    // if (!origin || whitelist.indexOf(origin) !== -1) callback(null, true);
+    if (!origin) callback(null, true);
     else callback(new Error('Not Allowed by CORS'));
   },
   credentials: true,
