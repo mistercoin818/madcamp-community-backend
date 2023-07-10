@@ -11,12 +11,16 @@
 
 - node.js v18.15.0
 - npm v9.5.0
+- docker
+- docker-compose
 - 몰입캠프 vm에서 설치하기
   - apt install npm
   - apt install curl
   - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
   - source ~/.bashrc
   - nvm install 18.15.0
+  - apt install docker
+  - apt install docker-compose
 
 ### 1. 이 repository를 clone합니다. 이후 과정은 모두 back 폴더에서 진행됩니다.
 
