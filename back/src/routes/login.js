@@ -42,4 +42,8 @@ router.post('/', async (req, res) => {
   return res.status(200).json({ success: true, token: token });
 });
 
+router.get('/', async (req, res) => {
+  res.send('login router');
+});
+
 module.exports = router;
