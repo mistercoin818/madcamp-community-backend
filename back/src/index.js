@@ -13,9 +13,11 @@ const PORT = process.env.PORT || 8000;
 const client = process.env.CLIENT;
 const cors = require('cors');
 
-// 라우터
+// 라우터 연결
 const loginRouter = require('./routes/login');
 app.use('/login', loginRouter);
+const joinRouter = require('./routes/join');
+app.use('/join', joinRouter);
 
 // DB 연결
 const db = require('../models');

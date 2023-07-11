@@ -16,11 +16,45 @@ const { User } = require('../../models/user');
 
 router.post('/', async (req, res) => {
   try {
-    const { kakaoId, userName, nickname, school, studentId, group, profileImg } = req.body;
-  } catch(e) {
+    const {
+      kakaoId,
+      userName,
+      nickname,
+      school,
+      studentId,
+      group,
+      profileImg,
+    } = req.body;
+
+    User.create({
+      kakaoId: kakaoId,
+      userName: userName,
+      nickname: nickname,
+      school: school,
+      studentId: studentId,
+      group: group,
+      profileImg: profileImg,
+      instaAcct: '',
+      instaPub: false,
+      githubAcct: '',
+      githubPub: false,
+      linkedinAcct: '',
+      linkedinPub: false,
+    });
+
+    const thatUser = User.findOne({
+      where: { kakaoId: kakaoId },
+    });
+
+    res.status(200).json({ success: true, id: thatUser.id });
+  } catch (e) {
     console.log(e);
     return res.status(500).json({ error: e });
   }
-})
+});
+
+router.get('/', async (req, res) => {
+  res.send('join router');
+});
 
 module.exports = router;
