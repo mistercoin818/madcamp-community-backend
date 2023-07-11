@@ -27,6 +27,8 @@ const postGroupRouter = require('./routes/post_group');
 app.use('/post_group', postGroupRouter);
 const profileRouter = require('./routes/profile');
 app.use('/profile', profileRouter);
+const scheduleRouter = require('./routes/schedule');
+app.use('/schedule', scheduleRouter);
 
 // DB 연결
 const db = require('../models');
@@ -83,10 +85,11 @@ app.post('/authenticate', async (req, res) => {
     // );
     const authUser = await UserAuth.findOne({
       where: {
-        KAISTId: Int(studentId),
+        KAISTId: parseInt(studentId),
         name: name
       },
     });
+    console.log(authUser);
     
     if (authUser !== null) {
       // 회원 인증 성공

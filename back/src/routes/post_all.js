@@ -41,7 +41,7 @@ router.post('/getposts', async (req, res) => {
 router.post('/getonepost', async (req, res) => {
   try {
     const { postId } = req.body;
-    const postId2 = Int(postId);
+    const postId2 = parseInt(postId);
     const post = await models.Post.findOne({
       include: [{
         model: models.User,
@@ -100,7 +100,7 @@ router.post('/createpost', async (req, res) => {
 router.post('/updatepost', async (req, res) => {
   try {
     const { kakaoId, postId, title, contents } = req.body;
-    const postId2 = Int(postId);
+    const postId2 = parseInt(postId);
     const kakaoId2 = BigInt(kakaoId);
     const thatUser = (await models.User.findOne({
       where: {
@@ -113,7 +113,7 @@ router.post('/updatepost', async (req, res) => {
       {
         title: title,
         contents: contents,
-        modifiedAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         where: {
@@ -136,7 +136,7 @@ router.post('/updatepost', async (req, res) => {
 router.post('/deletepost', async (req, res) => {
   try {
     const { kakaoId, postId } = req.body;
-    const postId2 = Int(postId);
+    const postId2 = parseInt(postId);
     const kakaoId2 = BigInt(kakaoId);
     const thatUser = (await models.User.findOne({
       where: {

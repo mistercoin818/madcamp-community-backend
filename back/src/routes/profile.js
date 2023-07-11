@@ -68,7 +68,7 @@ router.post('/updateinfo', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/user', async (req, res) => {
   // 테스트 --------------------
   // try {
   //   const kakaoId = '2905119779'
@@ -86,9 +86,75 @@ router.get('/', async (req, res) => {
   //   return res.status(500).json({ error: e });
   // }
   // --------------------------
+  const users = await models.User.findAll({
+    raw: true,
+  })
+  res.status(200).send(users);
+});
 
-  res.status(200).send('profile router');
+router.get('/post', async (req, res) => {
+  // 테스트 --------------------
+  // try {
+  //   const kakaoId = '2905119779'
+  //   const booll = Boolean('true');
+  //   console.log(booll);
+  //   const kakaoId2 = BigInt(kakaoId);
+  //   const thatUser = await models.User.findOne({
+  //     where: {
+  //       kakaoId: kakaoId2,
+  //     },
+  //   });
+  //   return res.status(200).send(thatUser);
+  // } catch (e) {
+  //   console.log(e);
+  //   return res.status(500).json({ error: e });
+  // }
+  // --------------------------
+  const posts = await models.Post.findAll({
+    raw: true,
+  })
+  res.status(200).send(posts);
+});
+
+router.get('/userauth', async (req, res) => {
+  // 테스트 --------------------
+  // try {
+  //   const kakaoId = '2905119779'
+  //   const booll = Boolean('true');
+  //   console.log(booll);
+  //   const kakaoId2 = BigInt(kakaoId);
+  //   const thatUser = await models.User.findOne({
+  //     where: {
+  //       kakaoId: kakaoId2,
+  //     },
+  //   });
+  //   return res.status(200).send(thatUser);
+  // } catch (e) {
+  //   console.log(e);
+  //   return res.status(500).json({ error: e });
+  // }
+  // --------------------------
+  const userAuths = await models.UserAuth.findAll({
+    raw: true,
+  })
+  res.status(200).send(userAuths);
 })
+router.get('/debug', async (req, res) => {
+  await models.Post.create(
+      {
+        authorId: 1,
+        title: 'title',
+        contents: 'contents',
+        tag: 'tag',
+        group: 1,
+        viewCnt: 0
+      }
+  );
+  console.log('처리했습니다');
+
+})
+
+
 
 
 
