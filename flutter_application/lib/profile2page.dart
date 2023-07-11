@@ -29,6 +29,7 @@ class _Profile2PageState extends State<Profile2Page> {
     final response = await request.send();
 
     if (response.statusCode == 200) {
+      print(response.toString());
       // 이미지 업로드 성공
       // TODO: 추가적인 처리 로직 작성
     } else {

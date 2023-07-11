@@ -71,17 +71,16 @@ app.post('/authenticate', async (req, res) => {
     const cnt = await UserAuth.count({
       where: {
         KAISTId: studentId,
-      }
-    })
+      },
+    });
     //conn.release();
     //console.log(rows);
 
     if (cnt > 0) {
       // 회원 인증 성공
       // console.log(rows[0].creation)
-        // 계정이 이미 생성된 회원
+      // 계정이 이미 생성된 회원
       res.status(200).send('등록된 회원, 로그인 페이지로 넘어갑니다.');
-    
     } else {
       // 회원 인증 실패
       res.status(400).send('회원 인증 실패');
@@ -94,7 +93,15 @@ app.post('/authenticate', async (req, res) => {
 });
 // ------------------------
 
-
+app.post('/upload', (req, res) => {
+  console.log('requested : /upload');
+  try {
+    const imagePath = req.body.image;
+    res.statusCode(200).json({ imagePath: imagePath });
+  } catch (e) {
+    res.statusCode(500).json({ error: e });
+  }
+});
 
 app.get('/', (req, res) => {
   console.log('requested.');
