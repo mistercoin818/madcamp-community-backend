@@ -18,6 +18,8 @@ const loginRouter = require('./routes/login');
 app.use('/login', loginRouter);
 const joinRouter = require('./routes/join');
 app.use('/join', joinRouter);
+const postAllRouter = require('./routes/post_all');
+app.use('/post_all', postAllRouter);
 
 // DB 연결
 const db = require('../models');
