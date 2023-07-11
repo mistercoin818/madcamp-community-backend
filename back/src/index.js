@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false })); // 중첩된 객체 받지 않음
+
 // 환경 변수 설정
 const dotenv = require('dotenv');
 if (process.env.NODE_ENV === 'development') {
@@ -58,8 +61,6 @@ const corsOptions = {
   AllowCredentials: true, // 쿠키 사용하려면 필요!
 };
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false })); // 중첩된 객체 받지 않음
 app.use(cors(corsOptions));
 
 // 요청
