@@ -13,6 +13,10 @@ const PORT = process.env.PORT || 8000;
 const client = process.env.CLIENT;
 const cors = require('cors');
 
+// 라우터
+const loginRouter = require('./routes/login');
+app.use('/login', loginRouter);
+
 // DB 연결
 const db = require('../models');
 db.sequelize

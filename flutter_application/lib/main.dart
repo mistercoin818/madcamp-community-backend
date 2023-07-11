@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/kakao_login.dart';
 import 'package:flutter_application/main_view_model.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() async {
-  await dotenv.load(fileName: "assets/config/.env");
+void main() {
   KakaoSdk.init(nativeAppKey: 'd23dd62b763c232f0407e791dd4fc0f0');
   runApp(const MyApp());
 }
@@ -46,8 +44,9 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Image.network(
-              viewModel.user?.kakaoAccount?.profile?.profileImageUrl ?? ''),
+          Image.network(viewModel
+                  .user?.kakaoAccount?.profile?.profileImageUrl ??
+              'https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg'),
           Text(
             '${viewModel.user?.kakaoAccount?.profile?.nickname}',
             style: Theme.of(context).textTheme.headlineMedium,
