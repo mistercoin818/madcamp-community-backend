@@ -28,22 +28,24 @@ router.post('/', async (req, res) => {
 
   if (thatUser === null) {
     // 만약에 해당 카카오 고유 id를 가진 유저가 없다면 돌려보내서 인증 및 가입하도록 한다.
-    res.status(200).send("도착했어!!!!! / 해당 id 유저 없음");
+    console.log('login : 해당 유저 없음 ' + kakaoId);
+    return res.status(300).send("도착했어!!!!! / 해당 id 유저 없음");
+  } else {
+    const token = jwt.sign(
+      {
+        type: 'JWT',
+        id: thatUser.id,
+        userName: thatUser.userName,
+      },
+      SECRET_KEY,
+      {
+        expiresIn: '30m',
+        issuer: ISSUER,
+      }
+    );
+    return res.status(200).json({ success: true, token: token });
   }
   // 유저가 있으면, DB 상의 id와 userName을 담아 jwt를 발급한다.
-  const token = jwt.sign(
-    {
-      type: 'JWT',
-      id: thatUser.id,
-      userName: thatUser.userName,
-    },
-    SECRET_KEY,
-    {
-      expiresIn: '30m',
-      issuer: ISSUER,
-    }
-  );
-  return res.status(200).json({ success: true, token: token });
   } catch (e) {
     console.log(e);
     return res.status(500).json({error: e});

@@ -23,6 +23,8 @@ const joinRouter = require('./routes/join');
 app.use('/join', joinRouter);
 const postAllRouter = require('./routes/post_all');
 app.use('/post_all', postAllRouter);
+const postGroupRouter = require('./routes/post_group');
+app.use('/post_group', postGroupRouter);
 
 // DB 연결
 const db = require('../models');
@@ -77,15 +79,14 @@ app.post('/authenticate', async (req, res) => {
     //   'SELECT * FROM user WHERE name = ? AND student_id = ?',
     //   [name, studentId]
     // );
-    const cnt = await UserAuth.count({
+    const authUser = await UserAuth.findOne({
       where: {
         KAISTId: studentId,
+        name: name
       },
     });
-    //conn.release();
-    //console.log(rows);
-
-    if (cnt > 0) {
+    
+    if (authUser !== null) {
       // 회원 인증 성공
       // console.log(rows[0].creation)
       // 계정이 이미 생성된 회원

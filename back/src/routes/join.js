@@ -12,7 +12,9 @@ const router = express.Router();
 const SECRET_KEY = process.env.JWT_KEY;
 const ISSUER = process.env.JWT_ISSUER;
 
-const { User } = require('../../models/user');
+// db 연결 ----------
+const models = require('../../models');
+// -----------------
 
 router.post('/', async (req, res) => {
   try {
@@ -26,7 +28,7 @@ router.post('/', async (req, res) => {
       profileImg,
     } = req.body;
 
-    User.create({
+    await models.User.create({
       kakaoId: kakaoId,
       userName: userName,
       nickname: nickname,
@@ -42,7 +44,7 @@ router.post('/', async (req, res) => {
       linkedinPub: false,
     });
 
-    const thatUser = User.findOne({
+    const thatUser = await models.User.findOne({
       where: { kakaoId: kakaoId },
     });
 

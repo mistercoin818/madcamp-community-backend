@@ -17,6 +17,14 @@ const Op = Sequelize.Op;
 
 router.post('/getposts', async (req, res) => {
   try {
+    const { kakaoId } = req.body;
+    const kakaoId2 = BigInt(kakaoId);
+    const group = (await models.User.findOne({
+      where: {
+        kakaoId: kakaoId2,
+      },
+      attributes: ['group']
+    })).group;
     const posts = await models.Post.findAll({ // jsonArray
       include: [{
         model: models.User,
@@ -24,13 +32,11 @@ router.post('/getposts', async (req, res) => {
         required: true,
       }],
       where: {
-        group: 0,
+        group: group,
       },
       attributes: ['title', [Sequelize.literal('author.userName'), 'authorName'], 'id', 'createdAt', 'contents', 'viewCnt'],
     });
     console.log(posts);
-
-
     return res.status(200).json({ posts: posts });
   } catch (e) {
     console.log(e);
@@ -40,7 +46,14 @@ router.post('/getposts', async (req, res) => {
 
 router.post('/getonepost', async (req, res) => {
   try {
-    const { postId } = req.body;
+    const { postId, kakaoId } = req.body;
+    const kakaoId2 = BigInt(kakaoId2);
+    const group = (await models.User.findOne({
+      where: {
+        kakaoId: kakaoId2,
+      },
+      attributes: ['group']
+    })).group;
     const post = await models.Post.findOne({
       include: [{
         model: models.User,
@@ -49,10 +62,8 @@ router.post('/getonepost', async (req, res) => {
         attributes: ['id', 'userName'],
       }],
       where: {
-        id: {
-          [Op.eq]: postId,
-        },
-        group: 0,
+        id: postId,
+        group: group
       },
       attributes: ['title', [Sequelize.literal('author.userName'), 'authorName'], 'id', 'createdAt', 'contents', 'viewCnt'],
     });
@@ -68,16 +79,16 @@ router.post('/getonepost', async (req, res) => {
 
 router.post('/createpost', async (req, res) => {
   try {
-    const { kakaoId, title, contents } = req.body;
+    const { title, contents, kakaoId } = req.body;
     const kakaoId2 = BigInt(kakaoId);
     const thatUser = (await models.User.findOne({
       where: {
         kakaoId: kakaoId2,
       },
-      attributes: ['id']
+      attributes: ['group', 'id']
     }));
     const authorId = thatUser.id;
-    const group = 0;
+    const group = thatUser.group;
     const tag = "";
     const viewCnt = 0;
     const thatPost = await models.Post.create(
@@ -100,14 +111,15 @@ router.post('/createpost', async (req, res) => {
 
 router.post('/updatepost', async (req, res) => {
   try {
-    const { kakaoId, postId, title, contents } = req.body;
+    const { postId, title, contents, kakaoId } = req.body;
     const kakaoId2 = BigInt(kakaoId);
     const thatUser = (await models.User.findOne({
       where: {
         kakaoId: kakaoId2,
       },
-      attributes: ['id']
+      attributes: ['group', 'id']
     }));
+    const group = thatUser.group;
     const userId = thatUser.id;
     const thatPost = await models.Post.update(
       {
@@ -119,6 +131,7 @@ router.post('/updatepost', async (req, res) => {
         where: {
           id: postId,
           authorId: userId,
+          group: group
         }
       },
     );
@@ -135,20 +148,22 @@ router.post('/updatepost', async (req, res) => {
 
 router.post('/deletepost', async (req, res) => {
   try {
-    const { kakaoId, postId } = req.body;
+    const { postId, kakaoId } = req.body;
     const kakaoId2 = BigInt(kakaoId);
     const thatUser = (await models.User.findOne({
       where: {
         kakaoId: kakaoId2,
       },
-      attributes: ['id']
+      attributes: ['group', 'id']
     }));
     const userId = thatUser.id;
+    const group = thatUser.group;
     const delCnt = await models.Post.destroy(
       {
         where: {
           id: postId,
           authorId: userId,
+          group: group
         }
       },
     );
@@ -167,27 +182,15 @@ router.post('/deletepost', async (req, res) => {
 router.get('/', async (req, res) => {
   // 테스트
   try {
-    const newPost = await models.Post.create(
-      {
-        authorId: 1,
-        title: 'title',
-        contents: 'contents',
-        tag: 'tag',
-        group: 0,
-        viewCnt: 0
-      }
-    );
-    console.log(newPost.dataValues);
-    const thatPost = await models.Post.destroy(
-      {
-        where: {
-          id: newPost.dataValues.id,
-          authorId: 1,
-        }
+    const kakaoId = 2905119779;
+    const group = (await models.User.findOne({
+      where: {
+        kakaoId: kakaoId,
       },
-    );
-    console.log(thatPost);
-    res.status(200).send(`호호 ${thatPost}`);
+      attributes: ['group']
+    })).group;
+    console.log(group);
+    res.status(200).send(`${group}`);
   }
   catch (e) {
     res.status(500).send('이게뭐야');
