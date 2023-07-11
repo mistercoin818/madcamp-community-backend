@@ -41,6 +41,7 @@ router.post('/getposts', async (req, res) => {
 router.post('/getonepost', async (req, res) => {
   try {
     const { postId } = req.body;
+    const postId2 = Int(postId);
     const post = await models.Post.findOne({
       include: [{
         model: models.User,
@@ -49,9 +50,7 @@ router.post('/getonepost', async (req, res) => {
         attributes: ['id', 'userName'],
       }],
       where: {
-        id: {
-          [Op.eq]: postId,
-        },
+        id: postId2,
         group: 0,
       },
       attributes: ['title', [Sequelize.literal('author.userName'), 'authorName'], 'id', 'createdAt', 'contents', 'viewCnt'],
@@ -101,6 +100,7 @@ router.post('/createpost', async (req, res) => {
 router.post('/updatepost', async (req, res) => {
   try {
     const { kakaoId, postId, title, contents } = req.body;
+    const postId2 = Int(postId);
     const kakaoId2 = BigInt(kakaoId);
     const thatUser = (await models.User.findOne({
       where: {
@@ -117,7 +117,7 @@ router.post('/updatepost', async (req, res) => {
       },
       {
         where: {
-          id: postId,
+          id: postId2,
           authorId: userId,
         }
       },
@@ -136,6 +136,7 @@ router.post('/updatepost', async (req, res) => {
 router.post('/deletepost', async (req, res) => {
   try {
     const { kakaoId, postId } = req.body;
+    const postId2 = Int(postId);
     const kakaoId2 = BigInt(kakaoId);
     const thatUser = (await models.User.findOne({
       where: {
@@ -147,7 +148,7 @@ router.post('/deletepost', async (req, res) => {
     const delCnt = await models.Post.destroy(
       {
         where: {
-          id: postId,
+          id: postId2,
           authorId: userId,
         }
       },
@@ -166,33 +167,44 @@ router.post('/deletepost', async (req, res) => {
 
 router.get('/', async (req, res) => {
   // 테스트
-  try {
-    const newPost = await models.Post.create(
-      {
-        authorId: 1,
-        title: 'title',
-        contents: 'contents',
-        tag: 'tag',
-        group: 0,
-        viewCnt: 0
-      }
-    );
-    console.log(newPost.dataValues);
-    const thatPost = await models.Post.destroy(
-      {
-        where: {
-          id: newPost.dataValues.id,
-          authorId: 1,
-        }
-      },
-    );
-    console.log(thatPost);
-    res.status(200).send(`호호 ${thatPost}`);
-  }
-  catch (e) {
-    res.status(500).send('이게뭐야');
-  }
+  // try {
+  //   const kakaoId = 2905119779;
+  //   const kakaoId2 = BigInt(kakaoId);
+  //   const thatUser = (await models.User.findOne({
+  //     where: {
+  //       kakaoId: kakaoId2,
+  //     },
+  //     attributes: ['id', 'userName']
+  //   }));
+  //   const authorId = thatUser.id;
+  //   console.log(thatUser.userName);
+  //   const newPost = await models.Post.create(
+  //     {
+  //       authorId: authorId,
+  //       title: 'title',
+  //       contents: 'contents',
+  //       tag: 'tag',
+  //       group: 1,
+  //       viewCnt: 0
+  //     }
+  //   );
+  //   console.log(newPost.dataValues);
+  //   const thatPost = await models.Post.destroy(
+  //     {
+  //       where: {
+  //         id: newPost.dataValues.id,
+  //         authorId: 1,
+  //       }
+  //     },
+  //   );
+  //   console.log(thatPost);
+  //   res.status(200).send(`호호 ${thatPost}`);
+  // }
+  // catch (e) {
+  //   res.status(500).send('이게뭐야');
+  // }
   // ------------------
+  res.status(200).send('post_all router');
 });
 
 module.exports = router;

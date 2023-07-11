@@ -29,12 +29,12 @@ router.post('/', async (req, res) => {
     } = req.body;
 
     await models.User.create({
-      kakaoId: kakaoId,
+      kakaoId: BigInt(kakaoId),
       userName: userName,
       nickname: nickname,
       school: school,
-      studentId: studentId,
-      group: group,
+      studentId: Int(studentId),
+      group: Int(group),
       profileImg: profileImg,
       instaAcct: '',
       instaPub: false,
@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
     });
 
     const thatUser = await models.User.findOne({
-      where: { kakaoId: kakaoId },
+      where: { kakaoId: BigInt(kakaoId) },
     });
 
     res.status(200).json({ success: true, id: thatUser.id });

@@ -47,7 +47,8 @@ router.post('/getposts', async (req, res) => {
 router.post('/getonepost', async (req, res) => {
   try {
     const { postId, kakaoId } = req.body;
-    const kakaoId2 = BigInt(kakaoId2);
+    const postId2 = Int(postId);
+    const kakaoId2 = BigInt(kakaoId);
     const group = (await models.User.findOne({
       where: {
         kakaoId: kakaoId2,
@@ -62,7 +63,7 @@ router.post('/getonepost', async (req, res) => {
         attributes: ['id', 'userName'],
       }],
       where: {
-        id: postId,
+        id: postId2,
         group: group
       },
       attributes: ['title', [Sequelize.literal('author.userName'), 'authorName'], 'id', 'createdAt', 'contents', 'viewCnt'],
@@ -112,6 +113,7 @@ router.post('/createpost', async (req, res) => {
 router.post('/updatepost', async (req, res) => {
   try {
     const { postId, title, contents, kakaoId } = req.body;
+    const postId2 = Int(postId);
     const kakaoId2 = BigInt(kakaoId);
     const thatUser = (await models.User.findOne({
       where: {
@@ -129,7 +131,7 @@ router.post('/updatepost', async (req, res) => {
       },
       {
         where: {
-          id: postId,
+          id: postId2,
           authorId: userId,
           group: group
         }
@@ -149,6 +151,7 @@ router.post('/updatepost', async (req, res) => {
 router.post('/deletepost', async (req, res) => {
   try {
     const { postId, kakaoId } = req.body;
+    const postId2 = Int(postId);
     const kakaoId2 = BigInt(kakaoId);
     const thatUser = (await models.User.findOne({
       where: {
@@ -161,7 +164,7 @@ router.post('/deletepost', async (req, res) => {
     const delCnt = await models.Post.destroy(
       {
         where: {
-          id: postId,
+          id: postId2,
           authorId: userId,
           group: group
         }

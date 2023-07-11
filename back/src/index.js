@@ -25,6 +25,8 @@ const postAllRouter = require('./routes/post_all');
 app.use('/post_all', postAllRouter);
 const postGroupRouter = require('./routes/post_group');
 app.use('/post_group', postGroupRouter);
+const profileRouter = require('./routes/profile');
+app.use('/profile', profileRouter);
 
 // DB 연결
 const db = require('../models');
@@ -81,7 +83,7 @@ app.post('/authenticate', async (req, res) => {
     // );
     const authUser = await UserAuth.findOne({
       where: {
-        KAISTId: studentId,
+        KAISTId: Int(studentId),
         name: name
       },
     });
