@@ -15,7 +15,7 @@ const ISSUER = process.env.JWT_ISSUER;
 const { User } = require('../../models/user');
 
 router.post('/', async (req, res) => {
-  console.log('[request] login.js 진입 : ' / '');
+  console.log('[request] login.js 진입');
   const { kakaoId } = req.body;
 
   const thatUser = User.findOne({
