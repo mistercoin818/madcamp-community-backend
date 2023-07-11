@@ -184,15 +184,55 @@ router.post('/attend', async (req, res) => {
       attributes: ['group', 'id']
     }));
     const userId = thatUser.id;
-    // TODO
+    
+    const cnt = models.UserSchedule.count(
+      { where: { authorId: userId, scheduleId: scheduleId2 }}
+    );
+    if (cnt > 0) {
+      return res.status(400).send('이미 참여 중인 일정입니다.');
+    }
+    const map = models.UserSchedule.create({
+      authorId: userId,
+      scheduleId: scheduleId2,
+    });
+    return res.status(200).json({ map: map });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: e });
+  }
+});
 
-
+router.post('/attendcancel', async (req, res) => {
+  try {
+    const { kakaoId, scheduleId } = req.body;
+    const scheduleId2 = parseInt(scheduleId);
+    const kakaoId2 = BigInt(kakaoId);
+    const thatUser = (await models.User.findOne({
+      where: {
+        kakaoId: kakaoId2,
+      },
+      attributes: ['group', 'id']
+    }));
+    const userId = thatUser.id;
+    
+    const cnt = models.UserSchedule.count(
+      { where: { authorId: userId, scheduleId: scheduleId2 }}
+    );
+    if (cnt < 1) {
+      return res.status(400).send('참여 중이지 않은 일정입니다.');
+    }
+    const map = models.UserSchedule.destroy({
+      where: {
+        authorId: userId,
+        scheduleId: scheduleId2,
+      },
+    });
+    return res.status(200).json({ map: map });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ error: e });
   }
 })
-
 
 router.get('/', async (req, res) => {
   // 테스트 --------------------
