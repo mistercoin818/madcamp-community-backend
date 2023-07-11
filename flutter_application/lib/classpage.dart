@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/profile2page.dart';
 
 class ClassPage extends StatelessWidget {
   @override
@@ -40,19 +41,20 @@ class ClassPage extends StatelessWidget {
               ),
               title: Text('Profile'),
               onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile2Page()));
                 print('Profile is clicked');
               },
             ),
-            ListTile(
-              leading: Icon(
-                Icons.settings,
-                color: Colors.grey[850],
-              ),
-              title: Text('Setting'),
-              onTap: () {
-                print('Setting is clicked');
-              },
-            ),
+            // ListTile(
+            //   leading: Icon(
+            //     Icons.settings,
+            //     color: Colors.grey[850],
+            //   ),
+            //   title: Text('Setting'),
+            //   onTap: () {
+            //     print('Setting is clicked');
+            //   },
+            // ),
           ],
         ),
       ),

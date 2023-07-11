@@ -7,7 +7,7 @@ class AllPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('전체 페이지'),
+        title: Text('전체 게시판'),
         elevation: 0.0,
         backgroundColor: Colors.blueAccent,
         centerTitle: true,
@@ -46,16 +46,16 @@ class AllPage extends StatelessWidget {
                 print('Profile is clicked');
               },
             ),
-            ListTile(
-              leading: Icon(
-                Icons.settings,
-                color: Colors.grey[850],
-              ),
-              title: Text('Setting'),
-              onTap: () {
-                print('Setting is clicked');
-              },
-            ),
+            // ListTile(
+            //   leading: Icon(
+            //     Icons.settings,
+            //     color: Colors.grey[850],
+            //   ),
+            //   title: Text('Setting'),
+            //   onTap: () {
+            //     print('Setting is clicked');
+            //   },
+            // ),
           ],
         ),
       ),
