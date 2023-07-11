@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/kakao_login.dart';
 import 'package:flutter_application/main_view_model.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main(){
+void main() async {
+  await dotenv.load(fileName: "assets/config/.env");
   KakaoSdk.init(nativeAppKey: 'd23dd62b763c232f0407e791dd4fc0f0');
   runApp(const MyApp());
 }
@@ -18,9 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(
-        title: '카카오 로그인 / 회원가입'
-      ),
+      home: const MyHomePage(title: '카카오 로그인 / 회원가입'),
     );
   }
 }
@@ -43,35 +43,31 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.network(viewModel.user?.kakaoAccount?.profile?.profileImageUrl ?? ''),
-            Text(
-              '${viewModel.user?.kakaoAccount?.profile?.nickname}',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            ElevatedButton(
-              onPressed: () async{
-                await viewModel.login();
-                setState(() {
-
-                });
-              },
-              child: const Text('Login'),
-            ),
-            ElevatedButton(
-              onPressed: () async{
-                await viewModel.logout();
-                setState(() {
-
-                });
-              },
-              child: const Text('Logout'),
-            ),
-          ],
-        )
-      ),
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Image.network(
+              viewModel.user?.kakaoAccount?.profile?.profileImageUrl ?? ''),
+          Text(
+            '${viewModel.user?.kakaoAccount?.profile?.nickname}',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await viewModel.login();
+              setState(() {});
+            },
+            child: const Text('Login'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await viewModel.logout();
+              setState(() {});
+            },
+            child: const Text('Logout'),
+          ),
+        ],
+      )),
     );
   }
 }

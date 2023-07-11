@@ -5,6 +5,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+String? baseUrl = dotenv.env['BASE_URL'];
+
 class Profile2Page extends StatefulWidget {
   const Profile2Page({super.key});
 
@@ -17,9 +21,10 @@ class _Profile2PageState extends State<Profile2Page> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> uploadImageToBackend(File imageFile) async {
-    final url = Uri.parse('http://localhost:8000/upload');
+    final url = Uri.parse('${baseUrl ??= 'http://localhost:8000'}/upload');
     final request = http.MultipartRequest('POST', url);
-    request.files.add(await http.MultipartFile.fromPath('image', imageFile.path));
+    request.files
+        .add(await http.MultipartFile.fromPath('image', imageFile.path));
 
     final response = await request.send();
 
@@ -36,7 +41,7 @@ class _Profile2PageState extends State<Profile2Page> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text('Profile'),
         elevation: 0.0,
         backgroundColor: Colors.blueAccent,
         centerTitle: true,
@@ -46,8 +51,8 @@ class _Profile2PageState extends State<Profile2Page> {
         child: ListView(
           children: <Widget>[
             imageProfile(),
-            SizedBox(height:20),
-            Row(
+            const SizedBox(height: 20),
+            const Row(
               children: <Widget>[
                 Icon(Icons.check_circle_outline),
                 SizedBox(
@@ -63,8 +68,8 @@ class _Profile2PageState extends State<Profile2Page> {
                 )
               ],
             ),
-            SizedBox(height:20),
-            Row(
+            const SizedBox(height: 20),
+            const Row(
               children: <Widget>[
                 Icon(Icons.check_circle_outline),
                 SizedBox(
@@ -80,8 +85,8 @@ class _Profile2PageState extends State<Profile2Page> {
                 )
               ],
             ),
-            SizedBox(height:20),
-            Row(
+            const SizedBox(height: 20),
+            const Row(
               children: <Widget>[
                 Icon(Icons.check_circle_outline),
                 SizedBox(
@@ -97,8 +102,8 @@ class _Profile2PageState extends State<Profile2Page> {
                 )
               ],
             ),
-            SizedBox(height:20),
-            Row(
+            const SizedBox(height: 20),
+            const Row(
               children: <Widget>[
                 Icon(Icons.check_circle_outline),
                 SizedBox(
@@ -114,40 +119,35 @@ class _Profile2PageState extends State<Profile2Page> {
                 )
               ],
             ),
-            SizedBox(height:20),
+            const SizedBox(height: 20),
             nicknameTextField(),
-            SizedBox(height:20),
+            const SizedBox(height: 20),
             instagramField(),
-            SizedBox(height:20),
+            const SizedBox(height: 20),
             githubField(),
-            SizedBox(height:20),
+            const SizedBox(height: 20),
             linkedInField(),
-            SizedBox(height:20),
+            const SizedBox(height: 20),
             ElevatedButton(
-                onPressed: (){
+                onPressed: () {
                   print('수정하기!');
                 }
                 // => uploadImageToBackend(_imageFile!)
                 ,
-                child: Text('수정하기')
-            ),
-
+                child: const Text('수정하기')),
           ],
         ),
       ),
     );
   }
 
-  Widget imageProfile(){
+  Widget imageProfile() {
     return Center(
-      child: Stack(
-        children: <Widget>[
-          CircleAvatar(
-            radius: 80,
-            backgroundImage:
-               AssetImage('assets/MadCamp.png')
-          ),
-          Positioned(
+        child: Stack(
+      children: <Widget>[
+        const CircleAvatar(
+            radius: 80, backgroundImage: AssetImage('assets/MadCamp.png')),
+        Positioned(
             bottom: 20,
             right: 20,
             child: InkWell(
@@ -155,49 +155,21 @@ class _Profile2PageState extends State<Profile2Page> {
                 showModalBottomSheet(
                     context: context, builder: ((builder) => bottomSheet()));
               },
-              child: Icon(
+              child: const Icon(
                 Icons.camera_alt,
                 color: Colors.grey,
                 size: 40,
               ),
-            )
-          )
-        ],
-      )
-    );
+            ))
+      ],
+    ));
   }
 
-  Widget nicknameTextField(){
+  Widget nicknameTextField() {
     return TextFormField(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.pink
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black,
-            width: 2,
-          ),
-        ),
-        prefixIcon: Icon(
-          Icons.person,
-          color: Colors.blueAccent,
-        ),
-        labelText: 'NickName',
-        hintText: 'Input your nickname'
-      ),
-    );
-  }
-
-  Widget instagramField(){
-    return TextFormField(
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
           border: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: Colors.pink
-            ),
+            borderSide: BorderSide(color: Colors.pink),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
@@ -206,22 +178,37 @@ class _Profile2PageState extends State<Profile2Page> {
             ),
           ),
           prefixIcon: Icon(
-            FontAwesomeIcons.instagram,
-            color: Colors.pink
+            Icons.person,
+            color: Colors.blueAccent,
           ),
+          labelText: 'NickName',
+          hintText: 'Input your nickname'),
+    );
+  }
+
+  Widget instagramField() {
+    return TextFormField(
+      decoration: const InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.pink),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.black,
+              width: 2,
+            ),
+          ),
+          prefixIcon: Icon(FontAwesomeIcons.instagram, color: Colors.pink),
           labelText: 'Instagram ID',
-          hintText: 'Input your Instagram ID'
-      ),
+          hintText: 'Input your Instagram ID'),
     );
   }
 
-  Widget githubField(){
+  Widget githubField() {
     return TextFormField(
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
           border: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: Colors.pink
-            ),
+            borderSide: BorderSide(color: Colors.pink),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
@@ -229,23 +216,17 @@ class _Profile2PageState extends State<Profile2Page> {
               width: 2,
             ),
           ),
-          prefixIcon: Icon(
-              FontAwesomeIcons.github,
-              color: Colors.black
-          ),
+          prefixIcon: Icon(FontAwesomeIcons.github, color: Colors.black),
           labelText: 'GitHub ID',
-          hintText: 'Input your GitHub ID'
-      ),
+          hintText: 'Input your GitHub ID'),
     );
   }
 
-  Widget linkedInField(){
+  Widget linkedInField() {
     return TextFormField(
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
           border: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: Colors.pink
-            ),
+            borderSide: BorderSide(color: Colors.pink),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
@@ -253,55 +234,49 @@ class _Profile2PageState extends State<Profile2Page> {
               width: 2,
             ),
           ),
-          prefixIcon: Icon(
-              FontAwesomeIcons.linkedin,
-              color: Colors.blue
-          ),
+          prefixIcon: Icon(FontAwesomeIcons.linkedin, color: Colors.blue),
           labelText: 'LinkedIn ID',
-          hintText: 'Input your LinkedIn ID'
-      ),
+          hintText: 'Input your LinkedIn ID'),
     );
   }
 
-  Widget bottomSheet(){
+  Widget bottomSheet() {
     return Container(
-      height: 100,
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 20
-      ),
-      child: Column(
-        children: <Widget>[
-          Text(
-            'Choose Profile photo',
-            style: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-          SizedBox(height: 20,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              ElevatedButton.icon(
-                onPressed: () {
-                  takePhoto(ImageSource.gallery);
-                },
-                icon: Icon(Icons.photo_library, size: 50),
-                label: Text('Gallery', style: TextStyle(fontSize: 20)),
+        height: 100,
+        width: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Column(
+          children: <Widget>[
+            const Text(
+              'Choose Profile photo',
+              style: TextStyle(
+                fontSize: 20,
               ),
-            ],
-          )
-        ],
-      )
-    );
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                ElevatedButton.icon(
+                  onPressed: () {
+                    takePhoto(ImageSource.gallery);
+                  },
+                  icon: const Icon(Icons.photo_library, size: 50),
+                  label: const Text('Gallery', style: TextStyle(fontSize: 20)),
+                ),
+              ],
+            )
+          ],
+        ));
   }
 
-  Future<void> takePhoto(ImageSource source) async{
-    final pickedFile = await _picker.pickImage(source:source);
-    if(pickedFile != null){
+  Future<void> takePhoto(ImageSource source) async {
+    final pickedFile = await _picker.pickImage(source: source);
+    if (pickedFile != null) {
       setState(() {
-        _imageFile = File(pickedFile!.path);
+        _imageFile = File(pickedFile.path);
       });
       await uploadImageToBackend(_imageFile!);
     }
