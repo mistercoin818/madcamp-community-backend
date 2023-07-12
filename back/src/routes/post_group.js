@@ -181,24 +181,4 @@ router.post('/deletepost', async (req, res) => {
   }
 });
 
-
-router.get('/', async (req, res) => {
-  // 테스트
-  try {
-    const kakaoId = 2905119779;
-    const group = (await models.User.findOne({
-      where: {
-        kakaoId: kakaoId,
-      },
-      attributes: ['group']
-    })).group;
-    console.log(group);
-    res.status(200).send(`${group}`);
-  }
-  catch (e) {
-    res.status(500).send('이게뭐야');
-  }
-  // ------------------
-});
-
 module.exports = router;

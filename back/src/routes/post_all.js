@@ -165,46 +165,4 @@ router.post('/deletepost', async (req, res) => {
 });
 
 
-router.get('/', async (req, res) => {
-  // 테스트
-  // try {
-  //   const kakaoId = 2905119779;
-  //   const kakaoId2 = BigInt(kakaoId);
-  //   const thatUser = (await models.User.findOne({
-  //     where: {
-  //       kakaoId: kakaoId2,
-  //     },
-  //     attributes: ['id', 'userName']
-  //   }));
-  //   const authorId = thatUser.id;
-  //   console.log(thatUser.userName);
-  //   const newPost = await models.Post.create(
-  //     {
-  //       authorId: authorId,
-  //       title: 'title',
-  //       contents: 'contents',
-  //       tag: 'tag',
-  //       group: 1,
-  //       viewCnt: 0
-  //     }
-  //   );
-  //   console.log(newPost.dataValues);
-  //   const thatPost = await models.Post.destroy(
-  //     {
-  //       where: {
-  //         id: newPost.dataValues.id,
-  //         authorId: 1,
-  //       }
-  //     },
-  //   );
-  //   console.log(thatPost);
-  //   res.status(200).send(`호호 ${thatPost}`);
-  // }
-  // catch (e) {
-  //   res.status(500).send('이게뭐야');
-  // }
-  // ------------------
-  res.status(200).send('post_all router');
-});
-
 module.exports = router;

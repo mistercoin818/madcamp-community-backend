@@ -90,12 +90,12 @@ router.post('/getoneschedule', async (req, res) => {
         model: models.User,
         as: 'author',
         required: true,
-        attributes: ['id', 'userName', 'kakaoId', 'profileImg'],
+        attributes: ['id', 'userName', 'kakaoId', 'profileImg', 'group'],
       }],
       where: {
         scheduleId: scheduleId2,
       },
-      attributes: [['authorId', 'participantId'], [Sequelize.literal('author.userName'), 'participantName'], [Sequelize.literal('author.kakaoId'), 'participantKakaoId'], [Sequelize.literal('author.profileImg'), 'participantProfileImg']], // DB 스키마가 이상한데, 참여자를 뜻함
+      attributes: [['authorId', 'participantId'], [Sequelize.literal('author.userName'), 'participantName'], [Sequelize.literal('author.group'), 'participantGroup'], [Sequelize.literal('author.kakaoId'), 'participantKakaoId'], [Sequelize.literal('author.profileImg'), 'participantProfileImg']], // DB 스키마가 이상한데, 참여자를 뜻함
     });
     const participants2 = participants.map(i => i.dataValues);
     return res.status(200).json({ schedule: schedule, participants: participants2 });
@@ -200,17 +200,20 @@ router.post('/attend', async (req, res) => {
     }));
     const userId = thatUser.id;
     
-    const cnt = models.UserSchedule.count(
+    models.UserSchedule.count(
       { where: { authorId: userId, scheduleId: scheduleId2 }}
-    );
-    if (cnt > 0) {
-      return res.status(400).send('이미 참여 중인 일정입니다.');
-    }
-    const map = models.UserSchedule.create({
-      authorId: userId,
-      scheduleId: scheduleId2,
+    ).then(cnt => {
+      if (cnt > 0) {
+        return res.status(400).send('이미 참여 중인 일정입니다.');
+      } else {
+        const map = models.UserSchedule.create({
+          authorId: userId,
+          scheduleId: scheduleId2,
+        });
+        return res.status(200).json({ map: map });
+      }
     });
-    return res.status(200).json({ map: map });
+    
   } catch (e) {
     console.log(e);
     return res.status(500).json({ error: e });
@@ -230,60 +233,33 @@ router.post('/attendcancel', async (req, res) => {
     }));
     const userId = thatUser.id;
     
-    const cnt = models.UserSchedule.count(
+    models.UserSchedule.count(
       { where: { authorId: userId, scheduleId: scheduleId2 }}
-    );
-    if (cnt < 1) {
-      return res.status(400).send('참여 중이지 않은 일정입니다.');
-    }
-    const map = models.UserSchedule.destroy({
-      where: {
-        authorId: userId,
-        scheduleId: scheduleId2,
-      },
+    ).then(cnt => {
+      if (cnt < 1) {
+        return res.status(400).send('참여 중이지 않은 일정입니다.');
+      } else {
+        const map = models.UserSchedule.findOne({
+          where: {
+            authorId: userId,
+            scheduleId: scheduleId2,
+          },
+        });
+        models.UserSchedule.destroy({
+          where: {
+            authorId: userId,
+            scheduleId: scheduleId2,
+          },
+        });
+        return res.status(200).json({ map: map });
+      }
     });
-    return res.status(200).json({ map: map });
+    
   } catch (e) {
     console.log(e);
     return res.status(500).json({ error: e });
   }
 })
 
-router.get('/', async (req, res) => {
-  // 테스트 --------------------
-  const scheduleId = '1';
-  const kakaoId = '2905119779';
-  const scheduleId2 = parseInt(scheduleId);
-  const kakaoId2 = BigInt(kakaoId);
-  const group = (await models.User.findOne({
-    where: {
-      kakaoId: kakaoId2,
-    },
-    attributes: ['group']
-  })).group;
-  const schedule = await models.Schedule.findOne({
-    include: [{
-      model: models.User,
-      as: 'author',
-      required: true,
-      attributes: ['id', 'userName'],
-    }],
-    where: {
-      id: scheduleId2,
-      [Op.or]: [
-        {
-          group: group,
-        }, {
-          group: 0
-        }
-      ]
-    },
-    attributes: ['title', [Sequelize.literal('author.userName'), 'authorName'], 'id', 'createdAt', 'updatedAt', 'contents', 'group', 'dueDate', 'startDate', 'endDate'],
-  });
-  return res.status(200).json({ schedule: schedule });
-  // --------------------------
-
-  res.status(200).send('schedule router');
-})
 
 module.exports = router;

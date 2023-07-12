@@ -55,8 +55,5 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
-  res.send('join router');
-});
 
 module.exports = router;
