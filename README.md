@@ -35,7 +35,7 @@
 
 ### 5. seeders 폴더에 `user_auto_info.csv`를 만들고, 몰입캠프 참가자 인증을 위한 정보를 담아서 저장합니다.
 
-### 6. 개발 환경에서는 `npm start` 또는 `npm start:dev`를 입력하면 서버가 켜지면서 db schema가 구성될 것입니다. 배포 환경은 명령어만 `npm start:prod`로 다릅니다. 일단 바로 끕니다.
+### 6. 개발 환경에서는 `npm start` 또는 `npm run start:dev`를 입력하면 서버가 켜지면서 db schema가 구성될 것입니다. 배포 환경은 명령어만 `npm run start:prod`로 다릅니다. 일단 바로 끕니다.
 
 ### 7. `npm run seed_user_auth`로, 4번에서 담아준 기본 인증용 정보를 db에 저장합니다.
 
