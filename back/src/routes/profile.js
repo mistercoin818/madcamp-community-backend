@@ -35,16 +35,36 @@ router.post('/getuserinfo', async (req, res) => {
   }
 });
 
+router.post('/getuserinfobyid', async (req, res) => {
+  try {
+    const { id } = req.body;
+    const id2 = parseInt(id);
+    const thatUser = await models.User.findOne({
+      where: {
+        id: id2,
+      },
+    });
+    if (thatUser === null) {
+      return res.status(300).send('해당 유저가 없습니다.');
+    } else {
+      return res.status(200).json({user: thatUser});
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: e });
+  }
+});
+
 router.post('/updateinfo', async (req, res) => {
   try {
-    const { kakaoId, nickname, instaAcct, instaPub, githubAcct, githubPub, linkedinAcct, linkedinPub, } = req.body;
+    console.log('/updateinfo');
+    const { kakaoId, instaAcct, instaPub, githubAcct, githubPub, linkedinAcct, linkedinPub, } = req.body;
     const kakaoId2 = BigInt(kakaoId);
     const instaPub2 = Boolean(instaPub);
     const githubPub2 = Boolean(githubPub);
     const linkedinPub2 = Boolean(linkedinPub);
-    const thatUser = await models.Post.update(
+    const thatUser = await models.User.update(
       {
-        nickname: nickname,
         instaAcct: instaAcct,
         instaPub: instaPub2,
         githubAcct: githubAcct,
@@ -55,12 +75,17 @@ router.post('/updateinfo', async (req, res) => {
       {
         where: {
           kakaoId: kakaoId2,
-        }
+        },
+        returning: true,
+        plain: true,
       },
     );
     if (thatUser === null) {
+      console.log('/updateinfo : 300');
       return res.status(300).send("해당하는 유저가 없습니다.");
     }
+    console.log('/updateinfo : 200');
+    console.log(thatUser);
     return res.status(200).json({user: thatUser});
   } catch (e) {
     console.log(e);
@@ -162,6 +187,59 @@ router.get('/userauth', async (req, res) => {
     raw: true,
   })
   res.status(200).send(userAuths);
+});
+
+router.get('/schedule', async (req, res) => {
+  // 테스트 --------------------
+  // try {
+  //   const kakaoId = '2905119779'
+  //   const booll = Boolean('true');
+  //   console.log(booll);
+  //   const kakaoId2 = BigInt(kakaoId);
+  //   const thatUser = await models.User.findOne({
+  //     where: {
+  //       kakaoId: kakaoId2,
+  //     },
+  //   });
+  //   return res.status(200).send(thatUser);
+  // } catch (e) {
+  //   console.log(e);
+  //   return res.status(500).json({ error: e });
+  // }
+  // --------------------------
+  const userAuths = await models.Schedule.findAll({
+    raw: true,
+  })
+  res.status(200).send(userAuths);
+});
+
+router.get('/comment', async (req, res) => {
+  // 테스트 --------------------
+  // try {
+  //   const kakaoId = '2905119779'
+  //   const booll = Boolean('true');
+  //   console.log(booll);
+  //   const kakaoId2 = BigInt(kakaoId);
+  //   const thatUser = await models.User.findOne({
+  //     where: {
+  //       kakaoId: kakaoId2,
+  //     },
+  //   });
+  //   return res.status(200).send(thatUser);
+  // } catch (e) {
+  //   console.log(e);
+  //   return res.status(500).json({ error: e });
+  // }
+  // --------------------------
+  const comments = await models.Comment.findAll({ // jsonArray
+    include: [{
+      model: models.User,
+      as: 'author',
+      required: true,
+    }],
+    attributes: ['title', [Sequelize.literal('author.userName'), 'authorName'], 'id', 'createdAt', 'contents', 'updatedAt', 'postId'],
+  });
+  res.status(200).send(comments);
 });
 
 router.get('/makepost', async (req, res) => {

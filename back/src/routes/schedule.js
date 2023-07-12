@@ -17,6 +17,7 @@ const Op = Sequelize.Op;
 
 router.post('/getschedules', async (req, res) => {
   try {
+    console.log('/getschedules');
     const { kakaoId } = req.body;
     const kakaoId2 = BigInt(kakaoId);
     const group = (await models.User.findOne({
@@ -40,7 +41,7 @@ router.post('/getschedules', async (req, res) => {
           }
         ]
       },
-      attributes: ['title', [Sequelize.literal('author.userName'), 'authorName'], 'id', 'createdAt', 'dueDate', 'startDate', 'endDate', 'group'],
+      attributes: ['title', 'contents', [Sequelize.literal('author.userName'), 'authorName'], 'id', 'createdAt', 'dueDate', 'startDate', 'endDate', 'group'],
     });
     console.log(schedules);
 
@@ -85,10 +86,16 @@ router.post('/getoneschedule', async (req, res) => {
       return res.status(300).send("해당 일정이 없습니다!");
     }
     const participants = await models.UserSchedule.findAll({
+      include: [{
+        model: models.User,
+        as: 'author',
+        required: true,
+        attributes: ['id', 'userName', 'kakaoId', 'profileImg'],
+      }],
       where: {
         scheduleId: scheduleId2,
       },
-      attributes: ['authorId'], // DB 스키마가 이상한데, 참여자를 뜻함
+      attributes: [['authorId', 'participantId'], [Sequelize.literal('author.userName'), 'participantName'], [Sequelize.literal('author.kakaoId'), 'participantKakaoId'], [Sequelize.literal('author.profileImg'), 'participantProfileImg']], // DB 스키마가 이상한데, 참여자를 뜻함
     });
     const participants2 = participants.map(i => i.dataValues);
     return res.status(200).json({ schedule: schedule, participants: participants2 });
@@ -100,8 +107,14 @@ router.post('/getoneschedule', async (req, res) => {
 
 router.post('/createschedule', async (req, res) => {
   try {
+    console.log('/createschedule');
     const { kakaoId, group, title, contents, dueDate, startDate } = req.body;
+    const group2 = parseInt(group);
     const kakaoId2 = BigInt(kakaoId);
+    const dueDate2 = new Date(dueDate);
+    const startDate2 = new Date(startDate);
+    console.log(dueDate2);
+    console.log(startDate2);
     const thatUser = (await models.User.findOne({
       where: {
         kakaoId: kakaoId2,
@@ -109,22 +122,24 @@ router.post('/createschedule', async (req, res) => {
       attributes: ['group', 'id']
     }));
     const authorId = thatUser.id;
-    if (group !== 0 && group !== thatUser.group) {
+    if (group2 !== 0 && group2 !== thatUser.group) {
       return res.status(400).send('잘못된 그룹 설정입니다.');
     }
+    console.log('그룹 검증 통과함');
     const endDate = new Date();
     const thatSchedule = await models.Schedule.create(
       {
         authorId: authorId,
         title: title,
         contents: contents,
-        group: group,
+        group: group2,
         createdAt: new Date(),
-        dueDate: dueDate,
-        startDate: startDate,
+        dueDate: dueDate2,
+        startDate: startDate2,
         endDate: endDate,
       }
     );
+    console.log(thatSchedule);
     return res.status(200).json({ schedule: thatSchedule });
 
   } catch (e) {

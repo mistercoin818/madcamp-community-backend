@@ -26,7 +26,7 @@ router.post('/getposts', async (req, res) => {
       where: {
         group: 0,
       },
-      attributes: ['title', [Sequelize.literal('author.userName'), 'authorName'], 'id', 'createdAt', 'contents', 'viewCnt'],
+      attributes: ['title', [Sequelize.literal('author.id'), 'authorId'], [Sequelize.literal('author.userName'), 'authorName'], 'id', 'createdAt', 'contents', 'viewCnt'],
     });
     console.log(posts);
 
@@ -53,7 +53,7 @@ router.post('/getonepost', async (req, res) => {
         id: postId2,
         group: 0,
       },
-      attributes: ['title', [Sequelize.literal('author.userName'), 'authorName'], 'id', 'createdAt', 'contents', 'viewCnt'],
+      attributes: ['title', [Sequelize.literal('author.id'), 'authorId'], [Sequelize.literal('author.userName'), 'authorName'], 'id', 'createdAt', 'contents', 'viewCnt'],
     });
     if (post === null) {
       return res.status(300).send("해당 글이 없습니다!");

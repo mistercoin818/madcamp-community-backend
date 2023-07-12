@@ -29,6 +29,8 @@ const profileRouter = require('./routes/profile');
 app.use('/profile', profileRouter);
 const scheduleRouter = require('./routes/schedule');
 app.use('/schedule', scheduleRouter);
+const commentRouter = require('./routes/comment');
+app.use('/comment', commentRouter);
 
 // DB 연결
 const db = require('../models');
